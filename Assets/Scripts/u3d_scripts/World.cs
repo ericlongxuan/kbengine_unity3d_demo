@@ -69,7 +69,7 @@ public class World : MonoBehaviour
 			Debug.Log("KeyCode.Space");
 			KBEngine.Event.fireIn("jump");
         }
-		else if (Input.GetMouseButton (0))     
+		else if (Input.GetMouseButtonDown (0))     
 		{   
 			// 射线选择，攻击
 			if(Camera.main)
@@ -79,8 +79,10 @@ public class World : MonoBehaviour
 
 				if (Physics.Raycast(ray, out hit))     
 				{   
-					Debug.DrawLine (ray.origin, hit.point); 
-					UnityEngine.GameObject gameObj = hit.collider.gameObject;
+					Debug.DrawLine (ray.origin, hit.point);
+                    Write.Log("Shot at someone");
+
+                    UnityEngine.GameObject gameObj = hit.collider.gameObject;
 					if(gameObj.name.IndexOf("terrain") == -1)
 					{
 						string[] s = gameObj.name.Split(new char[]{'_' });
@@ -150,7 +152,13 @@ public class World : MonoBehaviour
 		                     Quaternion.Euler(new Vector3(avatar.direction.y, avatar.direction.z, avatar.direction.x))) as UnityEngine.GameObject;
 
 		player.GetComponent<GameEntity>().entityDisable();
-		avatar.renderObj = player;
+
+        //------Added by Weichen-------
+        player.AddComponent<Write>();
+        Write.console.LogStart();
+        //-----------------------------
+
+        avatar.renderObj = player;
 		((UnityEngine.GameObject)avatar.renderObj).GetComponent<GameEntity>().isPlayer = true;
 		
 		// 有必要设置一下，由于该接口由Update异步调用，有可能set_position等初始化信息已经先触发了

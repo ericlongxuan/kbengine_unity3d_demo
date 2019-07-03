@@ -726,7 +726,14 @@
 				//}
 				try
 				{
-					eobj.info.method.Invoke (eobj.info.obj, eobj.args);
+                    //---- Weichen ----
+                    if (!eobj.eventname.Equals("updatePlayer"))
+                    {
+                        Write.Log("send to server: " + eobj.eventname);
+                        //Debug.Log(DateTime.Now.Millisecond + ", send to server: " + eobj.eventname);
+                    }
+                    //-----------------
+                    eobj.info.method.Invoke (eobj.info.obj, eobj.args);
 				}
 	            catch (Exception e)
 	            {
