@@ -84,15 +84,15 @@ public class UI : MonoBehaviour
 	
 	void onSelAvatarUI()
 	{
-		if (startCreateAvatar == false && GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 40, 200, 30), "RemoveAvatar(删除角色)"))    
+		if (startCreateAvatar == false && GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 40, 200, 30), "RemoveAvatar"))    
         {
 			if(selAvatarDBID == 0)
 			{
-				err("Please select a Avatar!(请选择角色!)");
+				err("Please select a Avatar!");
 			}
 			else
 			{
-				info("Please wait...(请稍后...)");
+				info("Please wait...");
 				
 				if(ui_avatarList != null && ui_avatarList.Count > 0)
 				{
@@ -102,20 +102,20 @@ public class UI : MonoBehaviour
 			}
         }
 
-		if (startCreateAvatar == false && GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 75, 200, 30), "CreateAvatar(创建角色)"))    
+		if (startCreateAvatar == false && GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 75, 200, 30), "CreateAvatar"))    
 		{
 			startCreateAvatar = !startCreateAvatar;
 		}
 
-        if (startCreateAvatar == false && GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 110, 200, 30), "EnterGame(进入游戏)"))    
+        if (startCreateAvatar == false && GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 110, 200, 30), "EnterGame"))    
         {
         	if(selAvatarDBID == 0)
         	{
-        		err("Please select a Avatar!(请选择角色!)");
+        		err("Please select a Avatar!");
         	}
         	else
         	{
-        		info("Please wait...(请稍后...)");
+        		info("Please wait...");
         		
 				KBEngine.Event.fireIn("selectAvatarGame", selAvatarDBID);
 				SceneManager.LoadScene("world");
@@ -125,7 +125,7 @@ public class UI : MonoBehaviour
 		
 		if(startCreateAvatar)
 		{
-	        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 40, 200, 30), "CreateAvatar-OK(创建完成)"))    
+	        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height - 40, 200, 30), "CreateAvatar-OK"))    
 	        {
 	        	if(stringAvatarName.Length > 1)
 	        	{
@@ -134,7 +134,7 @@ public class UI : MonoBehaviour
 				}
 				else
 				{
-					err("avatar name is null(角色名称为空)!");
+					err("avatar name is null!");
 				}
 	        }
 	        
@@ -178,7 +178,7 @@ public class UI : MonoBehaviour
 	
 	void onLoginUI()
 	{
-		if(GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 30, 200, 30), "Login(登陆)"))  
+		if(GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 30, 200, 30), "Login"))  
         {  
         	Debug.Log("stringAccount:" + stringAccount);
         	Debug.Log("stringPasswd:" + stringPasswd);
@@ -192,11 +192,11 @@ public class UI : MonoBehaviour
 			}
 			else
 			{
-				err("account or password is error, length < 6!(账号或者密码错误，长度必须大于5!)");
+				err("account or password is wrong, length < 6!");
 			}
         }
 
-        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 70, 200, 30), "CreateAccount(注册账号)"))  
+        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 70, 200, 30), "CreateAccount"))  
         {  
 			Debug.Log("stringAccount:" + stringAccount);
 			Debug.Log("stringPasswd:" + stringPasswd);
@@ -210,7 +210,7 @@ public class UI : MonoBehaviour
 			}
 			else
 			{
-				err("account or password is error, length < 6!(账号或者密码错误，长度必须大于5!)");
+				err("account or password is wrong, length < 6!");
 			}
         }
 
@@ -228,7 +228,7 @@ public class UI : MonoBehaviour
 	{
 		if(showReliveGUI)
 		{
-			if(GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Relive(复活)"))  
+			if(GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Relive"))  
 			{
 				KBEngine.Event.fireIn("relive", (Byte)1);		        	
 			}
@@ -294,13 +294,13 @@ public class UI : MonoBehaviour
 	
 	public void login()
 	{
-		info("connect to server...(连接到服务端...)");
+		info("connect to server...");
 		KBEngine.Event.fireIn("login", stringAccount, stringPasswd, System.Text.Encoding.UTF8.GetBytes("kbengine_unity3d_demo"));
 	}
 	
 	public void createAccount()
 	{
-		info("connect to server...(连接到服务端...)");
+		info("connect to server...");
 		
 		KBEngine.Event.fireIn("createAccount", stringAccount, stringPasswd, System.Text.Encoding.UTF8.GetBytes("kbengine_unity3d_demo"));
 	}
@@ -309,37 +309,37 @@ public class UI : MonoBehaviour
 	{
 		if(retcode != 0)
 		{
-			err("createAccount is error(注册账号错误)! err=" + KBEngineApp.app.serverErr(retcode));
+			err("createAccount has error! err=" + KBEngineApp.app.serverErr(retcode));
 			return;
 		}
 		
 		if(KBEngineApp.validEmail(stringAccount))
 		{
-			info("createAccount is successfully, Please activate your Email!(注册账号成功，请激活Email!)");
+			info("Account created successfully, Please activate your Email!");
 		}
 		else
 		{
-			info("createAccount is successfully!(注册账号成功!)");
+			info("Account created successfully!");
 		}
 	}
 	
 	public void onConnectionState(bool success)
 	{
 		if(!success)
-			err("connect(" + KBEngineApp.app.getInitArgs().ip + ":" + KBEngineApp.app.getInitArgs().port + ") is error! (连接错误)");
+			err("connect(" + KBEngineApp.app.getInitArgs().ip + ":" + KBEngineApp.app.getInitArgs().port + ") error!");
 		else
-			info("connect successfully, please wait...(连接成功，请等候...)");
+			info("connected successfully, please wait...");
 	}
 	
 	public void onLoginFailed(UInt16 failedcode, byte[] serverdatas)
 	{
         if (failedcode == 20)
 		{
-            err("login is failed(登陆失败), err=" + KBEngineApp.app.serverErr(failedcode) + ", " + System.Text.Encoding.ASCII.GetString(serverdatas));
+            err("login failed, err=" + KBEngineApp.app.serverErr(failedcode) + ", " + System.Text.Encoding.ASCII.GetString(serverdatas));
         }
 		else
 		{
-			err("login is failed(登陆失败), err=" + KBEngineApp.app.serverErr(failedcode));
+			err("login failed, err=" + KBEngineApp.app.serverErr(failedcode));
 		}
 	}
 	
@@ -355,29 +355,29 @@ public class UI : MonoBehaviour
 	
 	public void onLoginBaseappFailed(UInt16 failedcode)
 	{
-		err("loginBaseapp is failed(登陆网关失败), err=" + KBEngineApp.app.serverErr(failedcode));
+		err("loginBaseapp failed, err=" + KBEngineApp.app.serverErr(failedcode));
 	}
 	
 	public void onLoginBaseapp()
 	{
-		info("connect to loginBaseapp, please wait...(连接到网关， 请稍后...)");
+		info("connect to loginBaseapp, please wait...");
 	}
 
 	public void onReloginBaseappFailed(UInt16 failedcode)
 	{
-		err("relogin is failed(重连网关失败), err=" + KBEngineApp.app.serverErr(failedcode));
+		err("relogin failed, err=" + KBEngineApp.app.serverErr(failedcode));
 		startRelogin = false;
 	}
 	
 	public void onReloginBaseappSuccessfully()
 	{
-		info("relogin is successfully!(重连成功!)");
+		info("relogin successfully!");
 		startRelogin = false;
 	}
 	
 	public void onLoginSuccessfully(UInt64 rndUUID, Int32 eid, Account accountEntity)
 	{
-		info("login is successfully!(登陆成功!)");
+		info("login successfully!");
 		ui_state = 1;
 
 		SceneManager.LoadScene("selavatars");
@@ -425,7 +425,7 @@ public class UI : MonoBehaviour
 	{
 		if(dbid == 0)
 		{
-			err("Delete the avatar error!(删除角色错误!)");
+			err("Delete the avatar error!");
 			return;
 		}
 		
@@ -434,7 +434,7 @@ public class UI : MonoBehaviour
 	
 	public void onDisconnected()
 	{
-		err("disconnect! will try to reconnect...(你已掉线，尝试重连中!)");
+		err("disconnect! will try to reconnect...");
 		startRelogin = true;
 		Invoke("onReloginBaseappTimer", 1.0f);
 	}
@@ -443,7 +443,7 @@ public class UI : MonoBehaviour
 	{
 		if(ui_state == 0)
 		{
-			err("disconnect! (你已掉线!)");
+			err("disconnect! ");
 			return;
 		}
 	

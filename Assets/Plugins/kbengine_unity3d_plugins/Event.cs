@@ -685,10 +685,16 @@
 				//}
 				try
 				{
-					eobj.info.method.Invoke (eobj.info.obj, eobj.args);
+                    if (!eobj.eventname.Equals("updatePlayer"))
+                    {
+                        Write.Log("receive from server: " + eobj.eventname);
+                        //Debug.Log(DateTime.Now.Millisecond + ", send to server: " + eobj.eventname);
+                    }
+                    //-----------------
+                    eobj.info.method.Invoke (eobj.info.obj, eobj.args);
 				}
-	            catch (Exception e)
-	            {
+                catch (Exception e)
+                {
 	            	Dbg.ERROR_MSG("Event::processOutEvents: event=" + eobj.info.method.DeclaringType.FullName + "::" + eobj.info.funcname + "\n" + e.ToString());
 	            }
             
