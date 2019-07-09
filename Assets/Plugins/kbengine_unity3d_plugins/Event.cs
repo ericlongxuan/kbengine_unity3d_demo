@@ -735,7 +735,7 @@
                     //---- Weichen ----
                     if (!eobj.eventname.Equals("updatePlayer"))
                     {
-                        Write.Log("send to server: " + eobj.eventname);
+                        Write.Log("kbe plugin processing: " + eobj.eventname);
                         //Debug.Log(DateTime.Now.Millisecond + ", send to server: " + eobj.eventname);
                     }
                     //-----------------

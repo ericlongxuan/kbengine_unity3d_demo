@@ -1,4 +1,4 @@
-namespace KBEngine
+ï»¿namespace KBEngine
 {
   	using UnityEngine; 
 	using System; 
@@ -11,9 +11,9 @@ namespace KBEngine
     	public string descr;
     	public Int32 id;
     	public float canUseDistMin = 0f;
-    	public float canUseDistMax = 3f;
+    	public float canUseDistMax = 100f;  // changed by Weichen to allow shot from distance
 
-        // ×îºóÒ»´ÎÊ¹ÓÃÊ±¼ä£¬ ×îºÃµÄ×ö·¨ÊÇ¸ø¿Í»§¶ËÊµÌåÔö¼ÓcooldownÏµÍ³£¬ÓÉÓÚdemoÖ»ÊÇ¼òµ¥Õ¹Ê¾£¬¾ÍÕâÑù¼òµ¥ÊµÏÖ¹¦ÄÜ
+        // æœ€åä¸€æ¬¡ä½¿ç”¨æ—¶é—´ï¼Œ æœ€å¥½çš„åšæ³•æ˜¯ç»™å®¢æˆ·ç«¯å®ä½“å¢åŠ cooldownç³»ç»Ÿï¼Œç”±äºdemoåªæ˜¯ç®€å•å±•ç¤ºï¼Œå°±è¿™æ ·ç®€å•å®ç°åŠŸèƒ½
     	public System.DateTime lastUsedTime = System.DateTime.Now;
 
         public Skill()

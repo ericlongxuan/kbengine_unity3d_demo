@@ -24,8 +24,19 @@ public class UI : MonoBehaviour
 
 	private UInt64 selAvatarDBID = 0;
 	public bool showReliveGUI = false;
-	
-	bool startRelogin = false;
+
+
+    public bool showAutoReadyButton = true;
+    public bool showManualReadyButton = true;
+    public bool showSelectAiming = false;
+    public bool showCountDownLabel = false;
+    public double shootCountDown = 0;
+    public bool toShootManually = true;
+    public bool showAllowFireButton = false;
+    public bool showBang = false;
+    public UnityEngine.GameObject goingToShootAt;
+
+    bool startRelogin = false;
 	
 	void Awake() 
 	 {
@@ -37,7 +48,16 @@ public class UI : MonoBehaviour
 	void Start () 
 	{
 		installEvents();
-		SceneManager.LoadScene("login");
+        showAutoReadyButton = true;
+        showManualReadyButton = true;
+        showSelectAiming = false;
+        showCountDownLabel = false;
+        shootCountDown = 0;
+        toShootManually = true;
+        showAllowFireButton = false;
+        showBang = false;
+        goingToShootAt = null;
+        SceneManager.LoadScene("login");
 	}
 
 	void installEvents()
@@ -69,7 +89,7 @@ public class UI : MonoBehaviour
 
 	void OnDestroy()
 	{
-		KBEngine.Event.deregisterOut(this);
+        KBEngine.Event.deregisterOut(this);
 	}
 	
 	// Update is called once per frame
@@ -80,7 +100,55 @@ public class UI : MonoBehaviour
 			Debug.Log("KeyCode.Space");
 			KBEngine.Event.fireIn("jump");
         }
+
+        if (showCountDownLabel)
+        {
+            if (shootCountDown > 0)
+            {
+                shootCountDown -= Time.deltaTime;
+            }
+            else if (shootCountDown == 0)
+            {
+                if (DateTime.Now.Second % 5 == 0 && DateTime.Now.Millisecond < 100 && !showBang)
+                {
+                    UI.inst.shootCountDown = 3.8f;
+                }
+            }
+            else
+            {
+                shootCountDown = 0;
+                showCountDownLabel = false;
+
+                if (toShootManually)
+                {
+                    showAllowFireButton = true;
+                }
+                else
+                {
+                    showBang = true;
+                    _shotTrigger();
+                }
+
+            }
+        }
 	}
+
+    private void _shotTrigger()
+    {
+        string[] s = goingToShootAt.name.Split(new char[] { '_' });
+
+        if (s.Length > 0)
+        {
+            int targetEntityID = Convert.ToInt32(s[s.Length - 1]);
+            Write.Log("Shot at someone");
+            KBEngine.Event.fireIn("useTargetSkill", (Int32)1, (Int32)targetEntityID);
+        }
+
+        showAutoReadyButton = true;
+        showManualReadyButton = true;
+        showBang = false;
+    }
+
 	
 	void onSelAvatarUI()
 	{
@@ -233,8 +301,76 @@ public class UI : MonoBehaviour
 				KBEngine.Event.fireIn("relive", (Byte)1);		        	
 			}
 		}
-		
-		UnityEngine.GameObject obj = UnityEngine.GameObject.Find("player(Clone)");
+
+        GUIStyle myStyle = new GUIStyle(GUI.skin.label);
+        myStyle.fontSize = 50;
+        myStyle.normal.textColor = Color.red;
+
+        if (showCountDownLabel)
+            GUI.Label(new Rect((Screen.width / 2), Screen.height / 2, 200, 100), ((int)shootCountDown).ToString(), myStyle);
+
+        if (showBang)
+            GUI.Label(new Rect((Screen.width / 2), Screen.height / 2, 200, 100), "BANG!", myStyle);
+
+        if (showAutoReadyButton)
+        {
+            if (GUI.Button(new Rect(Screen.width/2 - 400, Screen.height / 2, 200, 30), "Auto shoot"))
+            {
+                showAutoReadyButton = false;
+                showManualReadyButton = false;
+                showSelectAiming = true;
+                toShootManually = false;
+                showCountDownLabel = false;
+                //shootCountDown = 0;
+                showBang = false;
+            }
+        }
+
+
+        if (showManualReadyButton)
+        {
+            if (GUI.Button(new Rect(Screen.width/2 + 200, Screen.height / 2, 200, 30), "Manual shoot"))
+            {
+                showAutoReadyButton = false;
+                showManualReadyButton = false;
+                showSelectAiming = true;
+                toShootManually = true;
+                showCountDownLabel = false;
+                //shootCountDown = 0;
+                showBang = false;
+            }
+        }
+
+        if (showSelectAiming)
+            GUI.Label(new Rect((Screen.width / 2 - 125), Screen.height / 2, 250, 100), "Select Enemy", myStyle);
+
+        if (showAllowFireButton)
+        {
+            if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "FIRE!!"))
+            {
+                showBang = true;
+                showAllowFireButton = false;
+                _shotTrigger();
+            }
+        }
+
+
+        //if(showStartShootCounting)
+        //{
+        //    Debug.Log("showStartShootCounting is true");
+        //    //UI.inst.showStartShootCounting = true;
+        //    GUI.Label(new Rect((Screen.width / 2), Screen.height / 2, 200, 100), ((int)shootCountDown).ToString());
+        //}
+        //else
+        //{
+        //    Debug.Log("showStartShootCounting is false");
+        //    if (GUI.Button(new Rect(Screen.width - 800, Screen.height / 2, 200, 30), "READY to shoot"))
+        //    {
+        //        UI.inst.showStartShootCounting = true;
+        //    }
+        //}
+
+        UnityEngine.GameObject obj = UnityEngine.GameObject.Find("player(Clone)");
 		if(obj != null)
 		{
 			GUI.Label(new Rect((Screen.width / 2) - 100, 20, 400, 100), "id=" + KBEngineApp.app.entity_id + ", position=" + obj.transform.position.ToString()); 

@@ -14,8 +14,11 @@ public class World : MonoBehaviour
 	private UnityEngine.GameObject player = null;
 	public UnityEngine.GameObject entityPerfab;
 	public UnityEngine.GameObject avatarPerfab;
-	
-	void Awake() 
+
+
+
+
+    void Awake() 
 	 {
 		DontDestroyOnLoad(transform.gameObject);
 	 }
@@ -75,24 +78,39 @@ public class World : MonoBehaviour
 			if(Camera.main)
 			{
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);   
-				RaycastHit hit;   
+				RaycastHit hit;
+
 
 				if (Physics.Raycast(ray, out hit))     
-				{   
-					Debug.DrawLine (ray.origin, hit.point);
-                    Write.Log("Shot at someone");
+				{
+                    Debug.Log(hit.collider.gameObject.name);
+                    if (UI.inst.showSelectAiming)
+                    {
+                        if (hit.collider.gameObject.name.IndexOf("Avatar") != -1)
+                        {
+                            UI.inst.goingToShootAt = hit.collider.gameObject;
+                            UI.inst.showSelectAiming = false;
+                            UI.inst.shootCountDown = 0f;
+                            UI.inst.showCountDownLabel = true;
+                        }
+                    }
+                    //else
+                    //{
+                    //    //Debug.DrawLine (ray.origin, hit.point);
+                    //    Write.Log("Shot at someone");
 
-                    UnityEngine.GameObject gameObj = hit.collider.gameObject;
-					if(gameObj.name.IndexOf("terrain") == -1)
-					{
-						string[] s = gameObj.name.Split(new char[]{'_' });
-						
-						if(s.Length > 0)
-						{
-							int targetEntityID = Convert.ToInt32(s[s.Length - 1]);
-							KBEngine.Event.fireIn("useTargetSkill", (Int32)1, (Int32)targetEntityID);	
-						}	
-					}
+                    //    UnityEngine.GameObject gameObj = hit.collider.gameObject;
+                    //    if (gameObj.name.IndexOf("terrain") == -1)
+                    //    {
+                    //        string[] s = gameObj.name.Split(new char[] { '_' });
+
+                    //        if (s.Length > 0)
+                    //        {
+                    //            int targetEntityID = Convert.ToInt32(s[s.Length - 1]);
+                    //            KBEngine.Event.fireIn("useTargetSkill", (Int32)1, (Int32)targetEntityID);
+                    //        }
+                    //    }
+                    //}
 				}  
 			}
 		}    

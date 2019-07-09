@@ -84,6 +84,7 @@ namespace KBEngine
 
 		public void useTargetSkill(Int32 arg1, Int32 arg2)
 		{
+            Write.Log("cellCall useTargetSkill");
 			Bundle pBundle = newCall("useTargetSkill", 0);
 			if(pBundle == null)
 				return;
