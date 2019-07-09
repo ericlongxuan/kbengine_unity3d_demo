@@ -48,6 +48,12 @@ public class UI : MonoBehaviour
 	void Start () 
 	{
 		installEvents();
+        initialDemoStatus();
+        SceneManager.LoadScene("login");
+	}
+
+    void initialDemoStatus()
+    {
         showAutoReadyButton = true;
         showManualReadyButton = true;
         showSelectAiming = false;
@@ -57,8 +63,7 @@ public class UI : MonoBehaviour
         showAllowFireButton = false;
         showBang = false;
         goingToShootAt = null;
-        SceneManager.LoadScene("login");
-	}
+    }
 
 	void installEvents()
 	{
@@ -298,7 +303,8 @@ public class UI : MonoBehaviour
 		{
 			if(GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Relive"))  
 			{
-				KBEngine.Event.fireIn("relive", (Byte)1);		        	
+				KBEngine.Event.fireIn("relive", (Byte)1);
+                initialDemoStatus();	        	
 			}
 		}
 
