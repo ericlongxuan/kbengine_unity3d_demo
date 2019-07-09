@@ -35,6 +35,7 @@ public class UI : MonoBehaviour
     public bool showAllowFireButton = false;
     public bool showBang = false;
     public UnityEngine.GameObject goingToShootAt;
+    public bool showDemoNewGame = false;
 
     bool startRelogin = false;
 	
@@ -63,6 +64,7 @@ public class UI : MonoBehaviour
         showAllowFireButton = false;
         showBang = false;
         goingToShootAt = null;
+        showDemoNewGame = false;
     }
 
 	void installEvents()
@@ -147,11 +149,8 @@ public class UI : MonoBehaviour
             int targetEntityID = Convert.ToInt32(s[s.Length - 1]);
             Write.Log("Shot at someone");
             KBEngine.Event.fireIn("useTargetSkill", (Int32)1, (Int32)targetEntityID);
+            showDemoNewGame = true;
         }
-
-        showAutoReadyButton = true;
-        showManualReadyButton = true;
-        showBang = false;
     }
 
 	
@@ -312,6 +311,14 @@ public class UI : MonoBehaviour
         myStyle.fontSize = 50;
         myStyle.normal.textColor = Color.red;
 
+        if (showDemoNewGame)
+        {
+            if (GUI.Button(new Rect(Screen.width / 2 + 200, Screen.height / 2 + 200, 200, 30), "Try Again"))
+            {
+                initialDemoStatus();
+            }
+        }
+
         if (showCountDownLabel)
             GUI.Label(new Rect((Screen.width / 2), Screen.height / 2, 200, 100), ((int)shootCountDown).ToString(), myStyle);
 
@@ -348,7 +355,7 @@ public class UI : MonoBehaviour
         }
 
         if (showSelectAiming)
-            GUI.Label(new Rect((Screen.width / 2 - 125), Screen.height / 2, 250, 100), "Select Enemy", myStyle);
+            GUI.Label(new Rect((Screen.width / 2 - 150), Screen.height / 2, 400, 100), "Select Enemy", myStyle);
 
         if (showAllowFireButton)
         {
